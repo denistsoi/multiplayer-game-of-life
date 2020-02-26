@@ -3,9 +3,9 @@ const WebSocket = require("ws");
 const wss = new WebSocket.Server({ port: 3001 })
 
 function setupBoard(width, height) {
-  let board = new Array(height);
+  let board = new Array(height).fill(0);
   for (let i = 0; i < board.length; i++) {
-    board[i] = new Array(width);
+    board[i] = new Array(width).fill(0);
   }
 
   return board;
@@ -13,7 +13,7 @@ function setupBoard(width, height) {
 
 class Game {
   constructor(width, height) {
-    this.state = {}
+    // this.state = {}
     this.height = height
     this.width = width
 
@@ -21,15 +21,13 @@ class Game {
   }
 
   get currentState() {
-    console.log(this._board)
-    return JSON.stringify(this.state)
+    // console.log(this._board)
+    return JSON.stringify(this._board)
+    // return JSON.stringify(this.state)
   }
 
-  updateState(data) {
-    this.state = {
-      ...this.state,
-      ...JSON.parse(data)
-    }
+  updateBoard(data) {
+    this._board = JSON.parse(data)
   }
 
   nextLife() {
@@ -73,7 +71,7 @@ class Game {
 
 // todo:
 // generate random id + color
-const game = new Game(10, 10);
+const game = new Game(2, 2);
 
 wss.on("connection", (ws) => {
   // on connection, re-create the app state (i.e game state)
@@ -83,7 +81,8 @@ wss.on("connection", (ws) => {
     wss.clients.forEach(client => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         // re-render game state
-        game.updateState(data)
+        game.updateBoard(data)
+        console.log(data, typeof data)
         setInterval(() => {
           client.send(game.currentState)
         }, 1000)
