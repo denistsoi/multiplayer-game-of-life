@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 
+import "./Game.css"
+
 const Game = ({ connection }) => {
   connection.onopen = (event) => {
     console.log("WebSocket is open now.");
@@ -21,7 +23,7 @@ const Game = ({ connection }) => {
 
 
   const handleSendMessage = event => {
-    const data = { state: event.target.id };
+    const data = { state: parseInt(event.target.id) };
     setActive(data)
     connection.send(JSON.stringify(data))
   }
@@ -32,9 +34,9 @@ const Game = ({ connection }) => {
     <div>
       <span>I am a gameboard</span>
 
-      <button id={1} className={isActive} onClick={handleSendMessage}>1</button>
-      <button id={2} onClick={handleSendMessage}>2</button>
-      <button id={3} onClick={handleSendMessage}>3</button>
+      <button id={1} className={isActive?.state === 1 ? "active" : ""} onClick={handleSendMessage}>1</button>
+      <button id={2} className={isActive?.state === 2 ? "active" : ""} onClick={handleSendMessage}>2</button>
+      <button id={3} className={isActive?.state === 3 ? "active" : ""} onClick={handleSendMessage}>3</button>
     </div>
   )
 }

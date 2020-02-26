@@ -19,6 +19,8 @@ class Game {
   }
 }
 
+// todo:
+// generate random id + color
 const game = new Game();
 
 wss.on("connection", (ws) => {
