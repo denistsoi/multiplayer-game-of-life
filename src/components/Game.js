@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import "./Game.css"
 
+import Grid from "./Grid"
+
 const Game = ({ connection }) => {
   connection.onopen = (event) => {
     console.log("WebSocket is open now.");
@@ -17,26 +19,34 @@ const Game = ({ connection }) => {
   connection.onmessage = (event) => {
     // Receiving data from wss
     const data = JSON.parse(event.data);
-    setActive(data)
+    // setActive(data)
   };
 
 
-  const handleSendMessage = event => {
-    const data = { state: parseInt(event.target.id) };
-    setActive(data)
-    connection.send(JSON.stringify(data))
+  const handleSendMessage = data => {
+
+
+    // const data = { state: parseInt(event.target.id) };
+    // setActive(data)
+    // connection.send(JSON.stringify(data))
+
+    // i need a grid (2d array of current state),
+    // such that, when clicking on cell, I need the x, y coordinates
   }
 
-  const [isActive, setActive] = useState(null)
+  const [state, setState] = useState({})
 
   return (
-    <div>
-      <span>I am a gameboard</span>
+    <>
+      <div>I am gameboard</div>
 
-      <button id={1} className={isActive?.state === 1 ? "active" : ""} onClick={handleSendMessage}>1</button>
-      <button id={2} className={isActive?.state === 2 ? "active" : ""} onClick={handleSendMessage}>2</button>
-      <button id={3} className={isActive?.state === 3 ? "active" : ""} onClick={handleSendMessage}>3</button>
-    </div>
+      <Grid
+        onClick={handleSendMessage}
+        state={state}
+        height={400}
+        width={400}
+      ></Grid>
+    </>
   )
 }
 
