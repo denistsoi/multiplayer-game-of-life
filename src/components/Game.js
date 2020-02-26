@@ -32,6 +32,8 @@ const Game = ({ connection }) => {
 
     // i need a grid (2d array of current state),
     // such that, when clicking on cell, I need the x, y coordinates
+    console.log(data);
+
   }
 
   const [state, setState] = useState({})
