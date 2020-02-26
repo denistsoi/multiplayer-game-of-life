@@ -1,24 +1,27 @@
 import React, { useRef, useEffect } from "react"
 
-const Grid = (props) => {
+const Grid = ({ height, width, numberOfCells, grid, setGrid, activeColor, onClick }) => {
   const canvasRef = useRef(null)
 
-  const numberOfCells = 10
-  // cell height
-  const cellHeight = props.height / numberOfCells
-  const cellWidth = props.width / numberOfCells
+  const cellHeight = height / numberOfCells
+  const cellWidth = width / numberOfCells
 
-  const currentColor = `${Math.random() * 256}, ${Math.random() * 256}, ${Math.random() * 256}`
+  // move this out
+  const baseColor = `rgb(255, 255, 255)`
 
   useEffect(() => {
     const context = canvasRef.current.getContext("2d")
 
     context.beginPath()
 
-    for (var x = 0, i = 0; i < numberOfCells; x = x + cellWidth, i++) {
-      for (var y = 0, j = 0; j < numberOfCells; y = y + cellHeight, j++) {
+    for (let x = 0, xIndex = 0; xIndex < numberOfCells; x = x + cellWidth, xIndex++) {
+      for (let y = 0, yIndex = 0; yIndex < numberOfCells; y = y + cellHeight, yIndex++) {
         context.rect(x, y, cellWidth, cellHeight)
-        context.fillStyle = `rgb(255, 255, 255)`
+        const color = grid[xIndex][yIndex] === 0 ? `${baseColor}` : `${activeColor}`
+        context.fillStyle = color
+
+        // debug
+        // console.log(xIndex, yIndex, grid[xIndex][yIndex], color)
       }
     }
 
@@ -29,9 +32,8 @@ const Grid = (props) => {
   })
 
   const handleClick = (event) => {
-    const context = canvasRef.current.getContext("2d")
+    // find the appropriate x,y coordinate
     const rect = canvasRef.current.getBoundingClientRect()
-
     const x = event.clientX - rect.left
     const y = event.clientY - rect.top
 
@@ -39,18 +41,23 @@ const Grid = (props) => {
       return Math.floor(
         (
           (coord * numberOfCells) /
-          (type === "x" ? props.width : props.height)
+          (type === "x" ? width : height)
         )
       )
     }
     let xIndex = getIndex("x")(x)
     let yIndex = getIndex("y")(y)
 
-    let xCoord = xIndex * cellWidth, yCoord = yIndex * cellHeight
+    let xCoord = xIndex * cellWidth
+    let yCoord = yIndex * cellHeight
+
+    // draw
+    const context = canvasRef.current.getContext("2d")
 
     context.beginPath()
 
-    context.fillStyle = `rgb(${currentColor})`
+    // toggle color
+    context.fillStyle = grid[xIndex][yIndex] === 0 ? `${activeColor}` : `${baseColor}`
     context.rect(xCoord, yCoord, cellHeight, cellHeight)
 
     context.fill();
@@ -58,9 +65,7 @@ const Grid = (props) => {
 
     context.closePath();
 
-    console.log(context, xCoord, yCoord, currentColor, cellHeight)
-
-    props.onClick({ xIndex, yIndex })
+    onClick({ xIndex, yIndex })
   }
 
   return (
@@ -70,8 +75,8 @@ const Grid = (props) => {
           margin: 10
         }}
         ref={canvasRef}
-        width={props.width}
-        height={props.height}
+        width={width}
+        height={height}
         onClick={handleClick}
       ></canvas>
     </div>
