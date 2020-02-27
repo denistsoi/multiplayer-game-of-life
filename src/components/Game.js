@@ -16,8 +16,7 @@ const Game = ({ connection }) => {
     console.error("WebSocket error observed:", event);
   };
 
-
-  const numberOfCells = 2
+  const numberOfCells = 10;
   const baseState = (numberOfCells) => {
     return new Array(numberOfCells).fill(0).map(_ => [...new Array(numberOfCells).fill(0)])
   }
@@ -60,8 +59,15 @@ const Game = ({ connection }) => {
 
   return (
     <>
-      <div>I am gameboard</div>
-      <div style={{ backgroundColor: `${activeColor}`, height: 20, width: 20 }}></div>
+      <div style={{
+        paddingBottom: "1em",
+        textAlign: "center",
+        display: "flex"
+      }}>
+
+        <div>I am gameboard</div>
+        <div style={{ backgroundColor: `${activeColor}`, height: 20, width: 20 }}></div>
+      </div>
 
       <Grid
         handleSendMessage={handleSendMessage}

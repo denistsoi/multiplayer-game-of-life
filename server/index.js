@@ -68,7 +68,7 @@ class Game {
 
 // todo:
 // generate random id + color
-const game = new Game(2, 2);
+const game = new Game(10, 10);
 
 wss.on("connection", (ws) => {
   // on connection, re-create the app state (i.e game state)
