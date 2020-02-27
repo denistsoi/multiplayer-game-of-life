@@ -15,7 +15,6 @@ const Grid = ({ height, width, numberOfCells, state, activeColor, onClick }) => 
     const context = canvasRef.current.getContext("2d")
 
     context.beginPath()
-    console.table(state.grid)
 
     for (let x = 0, xIndex = 0; xIndex < numberOfCells; x = x + cellWidth, xIndex++) {
       for (let y = 0, yIndex = 0; yIndex < numberOfCells; y = y + cellHeight, yIndex++) {
@@ -31,7 +30,7 @@ const Grid = ({ height, width, numberOfCells, state, activeColor, onClick }) => 
     context.stroke();
 
     context.closePath();
-  })
+  }, [activeColor, baseColor, numberOfCells, cellHeight, cellWidth])
 
 
 
