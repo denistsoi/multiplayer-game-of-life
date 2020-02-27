@@ -13,7 +13,6 @@ function setupBoard(width, height) {
 
 class Game {
   constructor(width, height) {
-    // this.state = {}
     this.height = height
     this.width = width
 
@@ -21,9 +20,7 @@ class Game {
   }
 
   get currentState() {
-    // console.log(this._board)
     return JSON.stringify(this._board)
-    // return JSON.stringify(this.state)
   }
 
   updateBoard(data) {
@@ -34,20 +31,20 @@ class Game {
     let next = setupBoard(this.width, this.height)
     let life = [...this._board]
 
-    for (let i of life.length) {
-      for (let j of life.length) {
+    // for (let i in life.length) {
+    //   for (let j in life.length) {
 
-        let state = life[i][j]
-        let neighbours = this.countNeighbours(life, i, j)
-        if (state == 0 && neighbours == 3) {
-          next[i][j] = 1
-        } else if (state == 1 && (neighbours < 2 || neighbours > 3)) {
-          next[i][j] = 0
-        } else {
-          next[i][j] = state
-        }
-      }
-    }
+    //     let state = life[i][j]
+    //     let neighbours = this.countNeighbours(life, i, j)
+    //     if (state == 0 && neighbours == 3) {
+    //       next[i][j] = 1
+    //     } else if (state == 1 && (neighbours < 2 || neighbours > 3)) {
+    //       next[i][j] = 0
+    //     } else {
+    //       next[i][j] = state
+    //     }
+    //   }
+    // }
     this._board = [...next]
   }
 
@@ -79,10 +76,11 @@ wss.on("connection", (ws) => {
 
   ws.on("message", data => {
     wss.clients.forEach(client => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
+      // if (client !== ws && client.readyState === WebSocket.OPEN) {
+      if (client.readyState === WebSocket.OPEN) {
         // re-render game state
         game.updateBoard(data)
-        console.log(data, typeof data)
+
         setInterval(() => {
           client.send(game.currentState)
         }, 1000)

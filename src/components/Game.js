@@ -18,17 +18,21 @@ const Game = ({ connection }) => {
 
 
   const numberOfCells = 2
-  const baseState = new Array(numberOfCells).fill(0).map(column => [...new Array(numberOfCells).fill(0)])
-  // const [grid, setGrid] = useState(baseState)
+  const baseState = (numberOfCells) => {
+    return new Array(numberOfCells).fill(0).map(_ => [...new Array(numberOfCells).fill(0)])
+  }
 
-  const [state, dispatch] = useReducer((state, action) => {
+  const [state, dispatch] = useReducer((state = {}, action = {}) => {
     switch (action.type) {
       case "update":
         return {
+          ...state,
           grid: action.payload
         }
+      default:
+        return state
     }
-  }, { grid: baseState })
+  }, { grid: baseState(numberOfCells) })
 
   connection.onmessage = (event) => {
     // Receiving data from wss
@@ -43,32 +47,15 @@ const Game = ({ connection }) => {
 
 
 
-
   // set active color
-  // const randomColor = `rgb(${Math.random() * 256}, ${Math.random() * 256}, ${Math.random() * 256})`
   const randomColor = "rgb(255,0,0)"
   const [activeColor, setActiveColor] = useState(randomColor)
 
-  // const [grid, setGrid] = useState(baseState)
-
   const handleSendMessage = data => {
-    // const data = { state: parseInt(event.target.id) };
-    // setActive(data)
-    // connection.send(JSON.stringify(data))
-
-    // update Grid
-    const copy = [...state.grid];
-    copy[data.xIndex][data.yIndex] = copy[data.xIndex][data.yIndex] === 0 ? 1 : 0;
-    // setGrid(copy)
-    dispatch({ type: "update", payload: copy })
-
-    // send grid to api
-    // console.log("state grid", JSON.stringify(grid))
-    console.log("copy")
-    console.table(copy)
-    connection.send(JSON.stringify(copy))
+    console.log(data)
+    dispatch({ type: "update", payload: data })
+    connection.send(JSON.stringify(data))
   }
-
 
 
   return (
@@ -77,7 +64,7 @@ const Game = ({ connection }) => {
       <div style={{ backgroundColor: `${activeColor}`, height: 20, width: 20 }}></div>
 
       <Grid
-        onClick={handleSendMessage}
+        handleSendMessage={handleSendMessage}
         state={state}
         numberOfCells={numberOfCells}
         activeColor={activeColor}
