@@ -27,6 +27,14 @@ To make the evolution more interesting, include a toolbar that places some prede
 > From the browser, clicking on any grid will create a live cell on that grid with the client's color.
 > This change should be synchronized across all connected clients.
 
+### Todo:
+
+- [ ] add color/ random color to server game state (to generate average color)  
+- [ ] add patterns  
+- [ ] fix pause/realtime toggle (and update game server)  
+- [ ] add preview (current state) ... i.e. one window is for designing pattern, another is for showing the current state  
+
+
 ### how to use
 
 ```
