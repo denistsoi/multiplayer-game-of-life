@@ -15,7 +15,7 @@ const Grid = ({ state, numberOfCells, activeColor, handleSendMessage }) => {
               style={{
                 width: 20,
                 height: 20,
-                backgroundColor: grid[x][y] ? activeColor : undefined,
+                backgroundColor: grid[x][y] ? activeColor : "white",
                 border: "solid 1px black"
               }}
               onClick={() => {

@@ -32,28 +32,58 @@ const Game = ({ connection }) => {
     if (event.data !== JSON.stringify(state.grid)) {
       console.log("recieve")
       console.table(data)
-      dispatch({ type: "update", payload: data })
+      if (realTime) {
+        dispatch({ type: "update", payload: data })
+      }
     }
   };
 
   const randomColor = new RandomColor();
   const [activeColor, setActiveColor] = useState(randomColor.value)
 
+  const [realTime, setRealTime] = useState(false)
+
   const handleSendMessage = updatedGrid => {
     dispatch({ type: "update", payload: updatedGrid })
-    connection.send(JSON.stringify(updatedGrid))
+
+    console.log(realTime, updatedGrid)
+    if (realTime) {
+      connection.send(JSON.stringify(updatedGrid))
+    }
   }
 
   return (
     <>
       <div style={{
         paddingBottom: "1em",
-        textAlign: "center",
-        display: "flex"
       }}>
 
         <div>I am gameboard</div>
-        <div style={{ backgroundColor: `${activeColor}`, height: 20, width: 20 }}></div>
+
+        <div style={{
+          textAlign: "center",
+          display: "flex"
+        }}>
+          <button onClick={() => {
+
+            // setRealTime()
+            // console.log(realTime)
+            setRealTime(!realTime)
+            handleSendMessage(state.grid)
+            // console.log(realTime)
+            // console.table(state.grid)
+          }}>{realTime ? "Real time" : "Paused"}</button>
+          <div style={{ backgroundColor: `${activeColor}`, height: 20, width: 20 }}></div>
+          <button>Clear Board</button>
+        </div>
+
+        {/* <div>
+          <span>Patterns</span>
+          <select></select>
+        </div> */}
+
+
+
       </div>
 
       <Grid

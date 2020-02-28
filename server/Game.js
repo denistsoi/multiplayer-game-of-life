@@ -47,7 +47,6 @@ class Game {
     }
 
     this._board = [...next];
-    this._board = [...next]
   }
 
   countNeighbours(board, x, y) {

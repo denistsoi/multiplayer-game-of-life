@@ -16,6 +16,7 @@ wss.on("connection", (ws) => {
       if (client.readyState === WebSocket.OPEN) {
         // re-render game state
         game.updateBoard(data)
+        console.log(data)
 
         setInterval(() => {
           game.nextLife()
