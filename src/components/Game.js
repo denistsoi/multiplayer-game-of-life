@@ -2,23 +2,15 @@ import React, { useState, useReducer } from "react"
 import "./Game.css"
 
 import Grid from "./Grid"
+import RandomColor from "./RandomColor"
 
 const Game = ({ connection }) => {
-  connection.onopen = (event) => {
-    console.log("WebSocket is open now.");
-  };
-
-  connection.onclose = (event) => {
-    console.log("WebSocket is closed now.");
-  };
-
-  connection.onerror = (event) => {
-    console.error("WebSocket error observed:", event);
-  };
-
-  const numberOfCells = 10;
+  const numberOfCells = 5;
   const baseState = (numberOfCells) => {
-    return new Array(numberOfCells).fill(0).map(_ => [...new Array(numberOfCells).fill(0)])
+    return new Array(numberOfCells)
+      .fill(0).map(_ =>
+        [...new Array(numberOfCells).fill(0)]
+      )
   }
 
   const [state, dispatch] = useReducer((state = {}, action = {}) => {
@@ -44,18 +36,13 @@ const Game = ({ connection }) => {
     }
   };
 
+  const randomColor = new RandomColor();
+  const [activeColor, setActiveColor] = useState(randomColor.value)
 
-
-  // set active color
-  const randomColor = "rgb(255,0,0)"
-  const [activeColor, setActiveColor] = useState(randomColor)
-
-  const handleSendMessage = data => {
-    console.log(data)
-    dispatch({ type: "update", payload: data })
-    connection.send(JSON.stringify(data))
+  const handleSendMessage = updatedGrid => {
+    dispatch({ type: "update", payload: updatedGrid })
+    connection.send(JSON.stringify(updatedGrid))
   }
-
 
   return (
     <>

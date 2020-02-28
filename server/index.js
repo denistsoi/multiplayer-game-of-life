@@ -1,74 +1,10 @@
 const http = require("http")
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({ port: 3001 })
+const Game = require("./Game")
 
-function setupBoard(width, height) {
-  let board = new Array(height).fill(0);
-  for (let i = 0; i < board.length; i++) {
-    board[i] = new Array(width).fill(0);
-  }
-
-  return board;
-}
-
-class Game {
-  constructor(width, height) {
-    this.height = height
-    this.width = width
-
-    this._board = setupBoard(width, height)
-  }
-
-  get currentState() {
-    return JSON.stringify(this._board)
-  }
-
-  updateBoard(data) {
-    this._board = JSON.parse(data)
-  }
-
-  nextLife() {
-    let next = setupBoard(this.width, this.height)
-    let life = [...this._board]
-
-    // for (let i in life.length) {
-    //   for (let j in life.length) {
-
-    //     let state = life[i][j]
-    //     let neighbours = this.countNeighbours(life, i, j)
-    //     if (state == 0 && neighbours == 3) {
-    //       next[i][j] = 1
-    //     } else if (state == 1 && (neighbours < 2 || neighbours > 3)) {
-    //       next[i][j] = 0
-    //     } else {
-    //       next[i][j] = state
-    //     }
-    //   }
-    // }
-    this._board = [...next]
-  }
-
-  countNeighbours(board, x, y) {
-    let counter = 0
-    let cols = this.width
-    let rows = this.height
-
-    for (let i = -1; i < 2; i++) {
-      for (let j = -1; j < 2; j++) {
-        let col = (x + i + cols) % cols;
-        let row = (y + j + rows) % rows;
-        counter += board[col][row];
-      }
-    }
-
-    counter -= board[x][y]
-    return counter
-  }
-}
-
-// todo:
 // generate random id + color
-const game = new Game(10, 10);
+const game = new Game();
 
 wss.on("connection", (ws) => {
   // on connection, re-create the app state (i.e game state)
@@ -82,6 +18,7 @@ wss.on("connection", (ws) => {
         game.updateBoard(data)
 
         setInterval(() => {
+          game.nextLife()
           client.send(game.currentState)
         }, 1000)
       }
@@ -92,5 +29,5 @@ wss.on("connection", (ws) => {
 const server = http.createServer()
 
 server.listen(8080, () => {
-  console.log("server listening on port 8080")
+  console.log("server listening on port 8080", new Date().getTime())
 })
