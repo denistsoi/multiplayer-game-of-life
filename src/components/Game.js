@@ -20,17 +20,13 @@ const Game = ({ connection }) => {
     // Receiving data from wss
     const data = JSON.parse(event.data);
 
-    if (!width) {
-      setWidth(data[0].length)
-    }
+    if (!width) setWidth(data[0].length)
+    if (!height) setHeight(data.length)
 
-    if (!height) {
-      setHeight(data.length)
-    }
+    console.log("recieve")
+    console.table(data)
 
     if (event.data !== JSON.stringify(state.grid)) {
-      console.log("recieve")
-      console.table(data)
       if (realTime) {
         dispatch({ type: "update", payload: data })
       }

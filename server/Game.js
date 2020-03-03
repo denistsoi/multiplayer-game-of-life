@@ -3,16 +3,20 @@ class Game {
     this.height = height
     this.width = width
 
-    this._board = this.setupBoard(width, height)
+    this._board = this.setupBoard({ width, height })
   }
 
-  setupBoard(width, height) {
+  setupBoard({ width, height }) {
     let board = new Array(height).fill(0);
     for (let i = 0; i < board.length; i++) {
       board[i] = new Array(width).fill(0);
     }
 
     return board;
+  }
+
+  clearBoard() {
+    this._board = this.setupBoard({ width: this.width, height: this.height })
   }
 
   get currentState() {
@@ -24,7 +28,7 @@ class Game {
   }
 
   nextLife() {
-    let next = this.setupBoard(this.width, this.height)
+    let next = this.setupBoard({ width: this.width, height: this.height })
     let life = [...this._board]
 
     // rows

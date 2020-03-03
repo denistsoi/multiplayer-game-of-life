@@ -6,15 +6,15 @@ const connection = new WebSocket("ws://localhost:3001");
 
 function App() {
   connection.onopen = (event) => {
-    console.log("WebSocket is open now.");
+    // console.log("WebSocket is open now.");
   };
 
   connection.onclose = (event) => {
-    console.log("WebSocket is closed now.");
+    // console.log("WebSocket is closed now.");
   };
 
   connection.onerror = (event) => {
-    console.error("WebSocket error observed:", event);
+    // console.error("WebSocket error observed:", event);
   };
 
   return (
