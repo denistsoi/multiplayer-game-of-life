@@ -7,26 +7,46 @@ const Game = require("./Game")
 const { height, width } = require("./config")
 const game = new Game({ height, width });
 
+const stringify = object => JSON.stringify(object);
+
 wss.on("connection", (ws) => {
   // on connection, re-create the app state (i.e game state)
-  ws.send(game.currentState)
-
-  ws.on("message", data => {
-    wss.clients.forEach(client => {
-      // if (client !== ws && client.readyState === WebSocket.OPEN) {
-      if (client.readyState === WebSocket.OPEN) {
-        // re-render game state
-        game.updateBoard(data)
-        console.log(data)
-
-        setInterval(() => {
-          game.nextLife()
-          client.send(game.currentState)
-        }, 1000)
-      }
+  ws.send(
+    stringify({
+      type: "connect",
+      grid: game.currentState,
+      timestamp: new Date().getTime()
     })
+  )
+
+  ws.on("message", message => {
+    const data = JSON.parse(message)
+
+    switch (data.type) {
+      case "update":
+        game.updateBoard(data.grid)
+        break;
+      default:
+        return
+    }
   })
 })
+
+/**
+ * automatically update based on interval
+ */
+setInterval(() => {
+  game.nextLife()
+  wss.clients.forEach(client => {
+    client.send(
+      stringify({
+        type: "update",
+        grid: game.currentState,
+        timestamp: new Date().getTime()
+      })
+    )
+  })
+}, 2000)
 
 const server = http.createServer()
 

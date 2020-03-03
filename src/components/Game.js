@@ -20,16 +20,16 @@ const Game = ({ connection }) => {
     // Receiving data from wss
     const data = JSON.parse(event.data);
 
-    if (!width) setWidth(data[0].length)
-    if (!height) setHeight(data.length)
-
-    console.log("recieve")
-    console.table(data)
-
-    if (event.data !== JSON.stringify(state.grid)) {
-      if (realTime) {
-        dispatch({ type: "update", payload: data })
-      }
+    switch (data.type) {
+      case "connect":
+        setWidth(data.grid[0].length)
+        setHeight(data.grid.length)
+        dispatch({ type: "update", payload: data.grid })
+        break;
+      case "update":
+        dispatch({ type: "update", payload: data.grid })
+        break;
+      default:
     }
   };
 
@@ -42,9 +42,9 @@ const Game = ({ connection }) => {
 
   const handleSendMessage = updatedGrid => {
     dispatch({ type: "update", payload: updatedGrid })
-    if (realTime) {
-      connection.send(JSON.stringify(updatedGrid))
-    }
+
+    const stringify = object => JSON.stringify(object)
+    connection.send(stringify({ type: "update", grid: updatedGrid }))
   }
 
   return (

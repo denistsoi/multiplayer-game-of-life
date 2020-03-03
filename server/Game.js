@@ -20,11 +20,11 @@ class Game {
   }
 
   get currentState() {
-    return JSON.stringify(this._board)
+    return this._board
   }
 
   updateBoard(data) {
-    this._board = JSON.parse(data)
+    this._board = data
   }
 
   nextLife() {
