@@ -71,8 +71,9 @@ const Game = ({ connection }) => {
         handleSendMessage={handleSendMessage}
         state={state}
         activeColor={activeColor}
-        height={height}
-        width={width}
+        numberOfCells={height}
+        height={450}
+        width={450}
       ></Grid>
     </>
   )

@@ -9,12 +9,13 @@ import React from "react"
  * 
  * @returns {Component} Grid 
  */
-const Grid = ({ state, height, width, activeColor, handleSendMessage }) => {
+const Grid = ({ state, height, width, numberOfCells, activeColor, handleSendMessage }) => {
   const { grid } = state
   return (
     <div style={{
       display: "grid",
-      gridTemplateColumns: `repeat(${width}, 20px)`
+      gridTemplateColumns: `repeat(${numberOfCells}, ${Math.round(width / numberOfCells)}px)`,
+      gridTemplateRows: `repeat(${numberOfCells}, ${Math.round(height / numberOfCells)}px)`
     }}>
       {
         grid.map((rows, x) =>
@@ -22,8 +23,8 @@ const Grid = ({ state, height, width, activeColor, handleSendMessage }) => {
             <div
               key={`${x}-${y}`}
               style={{
-                width: 20,
-                height: 20,
+                width: Math.floor(width / numberOfCells) - 2,
+                height: Math.floor(height / numberOfCells) - 2,
                 backgroundColor: grid[x][y] ? activeColor : "white",
                 border: "solid 1px black"
               }}

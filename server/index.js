@@ -4,7 +4,7 @@ const wss = new WebSocket.Server({ port: 3001 })
 const Game = require("./Game")
 
 // generate random id + color
-const { height, width } = require("./config")
+const { height, width, timePerLife } = require("./config")
 const game = new Game({ height, width });
 
 const stringify = object => JSON.stringify(object);
@@ -46,7 +46,7 @@ setInterval(() => {
       })
     )
   })
-}, 2000)
+}, timePerLife)
 
 const server = http.createServer()
 
