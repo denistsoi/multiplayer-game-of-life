@@ -29,11 +29,15 @@ To make the evolution more interesting, include a toolbar that places some prede
 
 ### Todo:
 
-- [ ] add color/ random color to server game state (to generate average color)  
+- [x] move number of Cells declaration as a config (and send that information on client init)
+  - [x] server
+  - [x] client (__removed__)
+
 - [ ] add patterns  
+
 - [ ] fix pause/realtime toggle (and update game server)  
 - [ ] add preview (current state) ... i.e. one window is for designing pattern, another is for showing the current state  
-
+- [ ] add color/ random color to server game state (to generate average color)  
 
 ### how to use
 

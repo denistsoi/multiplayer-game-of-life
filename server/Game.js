@@ -1,7 +1,5 @@
-const numberOfCells = 5
-
 class Game {
-  constructor(width = numberOfCells, height = numberOfCells) {
+  constructor({ width, height }) {
     this.height = height
     this.width = width
 
@@ -58,6 +56,7 @@ class Game {
       for (let j = -1; j < 2; j++) {
         let col = (x + i + cols) % cols;
         let row = (y + j + rows) % rows;
+
         counter += board[col][row];
       }
     }

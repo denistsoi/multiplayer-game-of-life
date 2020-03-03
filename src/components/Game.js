@@ -1,18 +1,9 @@
 import React, { useState, useReducer } from "react"
 import "./Game.css"
-
 import Grid from "./Grid"
 import RandomColor from "./RandomColor"
 
 const Game = ({ connection }) => {
-  const numberOfCells = 5;
-  const baseState = (numberOfCells) => {
-    return new Array(numberOfCells)
-      .fill(0).map(_ =>
-        [...new Array(numberOfCells).fill(0)]
-      )
-  }
-
   const [state, dispatch] = useReducer((state = {}, action = {}) => {
     switch (action.type) {
       case "update":
@@ -23,11 +14,19 @@ const Game = ({ connection }) => {
       default:
         return state
     }
-  }, { grid: baseState(numberOfCells) })
+  }, { grid: [] })
 
   connection.onmessage = (event) => {
     // Receiving data from wss
     const data = JSON.parse(event.data);
+
+    if (!width) {
+      setWidth(data[0].length)
+    }
+
+    if (!height) {
+      setHeight(data.length)
+    }
 
     if (event.data !== JSON.stringify(state.grid)) {
       console.log("recieve")
@@ -40,13 +39,13 @@ const Game = ({ connection }) => {
 
   const randomColor = new RandomColor();
   const [activeColor, setActiveColor] = useState(randomColor.value)
+  const [realTime, setRealTime] = useState(true)
 
-  const [realTime, setRealTime] = useState(false)
+  const [height, setHeight] = useState(0)
+  const [width, setWidth] = useState(0)
 
   const handleSendMessage = updatedGrid => {
     dispatch({ type: "update", payload: updatedGrid })
-
-    console.log(realTime, updatedGrid)
     if (realTime) {
       connection.send(JSON.stringify(updatedGrid))
     }
@@ -65,34 +64,19 @@ const Game = ({ connection }) => {
           display: "flex"
         }}>
           <button onClick={() => {
-
-            // setRealTime()
-            // console.log(realTime)
             setRealTime(!realTime)
-            handleSendMessage(state.grid)
-            // console.log(realTime)
-            // console.table(state.grid)
           }}>{realTime ? "Real time" : "Paused"}</button>
           <div style={{ backgroundColor: `${activeColor}`, height: 20, width: 20 }}></div>
           <button>Clear Board</button>
         </div>
-
-        {/* <div>
-          <span>Patterns</span>
-          <select></select>
-        </div> */}
-
-
-
       </div>
 
       <Grid
         handleSendMessage={handleSendMessage}
         state={state}
-        numberOfCells={numberOfCells}
         activeColor={activeColor}
-        height={400}
-        width={400}
+        height={height}
+        width={width}
       ></Grid>
     </>
   )

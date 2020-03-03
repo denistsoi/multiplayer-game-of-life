@@ -4,7 +4,8 @@ const wss = new WebSocket.Server({ port: 3001 })
 const Game = require("./Game")
 
 // generate random id + color
-const game = new Game();
+const { height, width } = require("./config")
+const game = new Game({ height, width });
 
 wss.on("connection", (ws) => {
   // on connection, re-create the app state (i.e game state)

@@ -1,11 +1,20 @@
 import React from "react"
 
-const Grid = ({ state, numberOfCells, activeColor, handleSendMessage }) => {
+/**
+ * @param {*} props 
+ *  @param {State} state
+ *  @param {Number} numberOfCells
+ *  @param {String} activeColor
+ *  @param {Function} handleSendMessage
+ * 
+ * @returns {Component} Grid 
+ */
+const Grid = ({ state, height, width, activeColor, handleSendMessage }) => {
   const { grid } = state
   return (
     <div style={{
       display: "grid",
-      gridTemplateColumns: `repeat(${numberOfCells}, 20px)`
+      gridTemplateColumns: `repeat(${width}, 20px)`
     }}>
       {
         grid.map((rows, x) =>
