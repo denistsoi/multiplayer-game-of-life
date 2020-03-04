@@ -1,70 +1,79 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useReducer } from "react"
 import "./Game.css"
-
 import Grid from "./Grid"
+import RandomColor from "./RandomColor"
 
 const Game = ({ connection }) => {
-  connection.onopen = (event) => {
-    console.log("WebSocket is open now.");
-  };
-
-  connection.onclose = (event) => {
-    console.log("WebSocket is closed now.");
-  };
-
-  connection.onerror = (event) => {
-    console.error("WebSocket error observed:", event);
-  };
-
-
-  const numberOfCells = 2
-  const baseState = new Array(numberOfCells).fill(0).map(column => [...new Array(numberOfCells).fill(0)])
-  const [grid, setGrid] = useState(baseState)
+  const [state, dispatch] = useReducer((state = {}, action = {}) => {
+    switch (action.type) {
+      case "update":
+        return {
+          ...state,
+          grid: action.payload
+        }
+      default:
+        return state
+    }
+  }, { grid: [] })
 
   connection.onmessage = (event) => {
     // Receiving data from wss
     const data = JSON.parse(event.data);
-    // setActive(data)
+
+    switch (data.type) {
+      case "connect":
+        setWidth(data.grid[0].length)
+        setHeight(data.grid.length)
+        dispatch({ type: "update", payload: data.grid })
+        break;
+      case "update":
+        dispatch({ type: "update", payload: data.grid })
+        break;
+      default:
+    }
   };
 
+  const randomColor = new RandomColor();
+  const [activeColor, setActiveColor] = useState(randomColor.value)
+  const [realTime, setRealTime] = useState(true)
 
+  const [height, setHeight] = useState(0)
+  const [width, setWidth] = useState(0)
 
+  const handleSendMessage = updatedGrid => {
+    dispatch({ type: "update", payload: updatedGrid })
 
-  // set active color
-  const [activeColor, setActiveColor] = useState(`rgba(${Math.random() * 256}, ${Math.random() * 256}, ${Math.random() * 256}, ${Math.random() * 256})`)
-
-  // const [grid, setGrid] = useState(baseState)
-
-  const handleSendMessage = data => {
-    // const data = { state: parseInt(event.target.id) };
-    // setActive(data)
-    // connection.send(JSON.stringify(data))
-
-    // i need a grid (2d array of current state),
-    // such that, when clicking on cell, I need the x, y coordinates
-
-    // const copy = [...grid];
-    // copy[data.xIndex][data.yIndex] = 1;
-    // setGrid(copy)
-
-    console.log("state grid", JSON.stringify(grid))
+    const stringify = object => JSON.stringify(object)
+    connection.send(stringify({ type: "update", grid: updatedGrid }))
   }
-
-
 
   return (
     <>
-      <div>I am gameboard</div>
-      <div style={{ backgroundColor: activeColor, height: 20, width: 20 }}></div>
+      <div style={{
+        paddingBottom: "1em",
+      }}>
+
+        <div>I am gameboard</div>
+
+        <div style={{
+          textAlign: "center",
+          display: "flex"
+        }}>
+          <button onClick={() => {
+            setRealTime(!realTime)
+          }}>{realTime ? "Real time" : "Paused"}</button>
+          <div style={{ backgroundColor: `${activeColor}`, height: 20, width: 20 }}></div>
+          <button>Clear Board</button>
+        </div>
+      </div>
 
       <Grid
-        onClick={handleSendMessage}
-        grid={grid}
-        setGrid={setGrid}
-        numberOfCells={numberOfCells}
+        handleSendMessage={handleSendMessage}
+        state={state}
         activeColor={activeColor}
-        height={400}
-        width={400}
+        numberOfCells={height}
+        height={450}
+        width={450}
       ></Grid>
     </>
   )

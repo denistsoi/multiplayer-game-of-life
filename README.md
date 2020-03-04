@@ -22,6 +22,23 @@ When a dead cell revives by rule #4 "Any dead cell with exactly three live neigh
 To make the evolution more interesting, include a toolbar that places some predefined patterns at random places with the player's color, such as those found at here https://en.wikipedia.org/wiki/Conway's_Game_of_Life#Examples_of_patterns (not necessary to implement all, just 3 - 4 is fine).
 ```
 
+> This server allows multiple browser to share the same, synchronized world view.
+> Each client is assigned a random color on initialization. 
+> From the browser, clicking on any grid will create a live cell on that grid with the client's color.
+> This change should be synchronized across all connected clients.
+
+### Todo:
+
+- [x] move number of Cells declaration as a config (and send that information on client init)
+  - [x] server
+  - [x] client (__removed__)
+
+- [ ] add patterns  
+
+- [ ] fix pause/realtime toggle (and update game server)  
+- [ ] add preview (current state) ... i.e. one window is for designing pattern, another is for showing the current state  
+- [ ] add color/ random color to server game state (to generate average color)  
+
 ### how to use
 
 ```
