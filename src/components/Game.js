@@ -52,18 +52,19 @@ const Game = ({ connection }) => {
       <div style={{
         paddingBottom: "1em",
       }}>
-
-        <div>I am gameboard</div>
-
         <div style={{
           textAlign: "center",
           display: "flex"
         }}>
-          <button onClick={() => {
+          {/* <button onClick={() => {
             setRealTime(!realTime)
-          }}>{realTime ? "Real time" : "Paused"}</button>
-          <div style={{ backgroundColor: `${activeColor}`, height: 20, width: 20 }}></div>
-          <button>Clear Board</button>
+          }}>{realTime ? "Real time" : "Paused"}</button> */}
+          <div style={{
+            backgroundColor: `${activeColor}`,
+            height: 20,
+            width: 20
+          }}></div>
+
         </div>
       </div>
 

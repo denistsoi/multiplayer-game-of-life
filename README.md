@@ -8,6 +8,11 @@ Conway's game of life
 
 ![demo.gif](./demo.gif)
 
+### Context
+
+The `server/Game.js` is based from `https://github.com/denistsoi/game-of-life` which has been ported over to this repository. The code itself is based from codingtrain's 
+
+
 ### instructions
 
 > Create a multiplayer Web app version of Game of Life, with the following functions. 
@@ -23,6 +28,22 @@ Conway's game of life
 5. When a dead cell revives by rule #4 "Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.", it will be given a color that is the average of its neighbours (that revive it).
 
 6. To make the evolution more interesting, include a toolbar that places some predefined patterns at random places with the player's color, such as those found at [here](https://en.wikipedia.org/wiki/Conway's_Game_of_Life#Examples_of_patterns) (not necessary to implement all, just 3 - 4 is fine).
+
+
+### todos
+
+- [x] fix syncing issue with server/client
+- [x] move configuration to server side
+
+#### outstanding todos
+- [ ] add patterns  
+- [ ] add color/ random color to server game state (to generate average color)  
+
+#### outstanding todos
+- [ ] add timer to next cycle
+- [ ] add current life cycle (max-cycles)
+- [ ] disable selection of cell if not current player
+
 
 ### How to use
 
