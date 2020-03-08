@@ -31,17 +31,17 @@ The `server/Game.js` is based from `https://github.com/denistsoi/game-of-life` w
 
 
 ### todos
-
 - [x] fix syncing issue with server/client
 - [x] move configuration to server side
 
-#### outstanding todos
-- [ ] add patterns  
-- [ ] add color/ random color to server game state (to generate average color)  
 
 #### outstanding todos
-- [ ] add timer to next cycle
-- [ ] add current life cycle (max-cycles)
+- [ ] add color/ random color to server game state (to generate average color)  
+- [ ] add patterns  
+
+- [ ] life cycle indicator
+  - [ ] add timer to next cycle
+  - [ ] add current life cycle (max-cycles)
 - [ ] disable selection of cell if not current player
 
 
