@@ -1,7 +1,6 @@
-import React, { useState, useReducer } from "react"
+import React, { useReducer } from "react"
 import Grid from "../Grid"
 import "./style.css"
-
 
 import { gridReducer } from "./reducer"
 import api from "../../api/apiHandler"
@@ -9,12 +8,11 @@ import api from "../../api/apiHandler"
 
 const Game = ({ connection }) => {
   // setup state
-  const [state, dispatch] = useReducer(gridReducer, { height: 0, width: 0, grid: [] })
+  const initialState = { height: 0, width: 0, grid: [], activeColor: null }
+  const [state, dispatch] = useReducer(gridReducer, initialState)
 
   // handle on message
   connection.onmessage = (event) => api.onMessageHandler(event, dispatch)
-
-  const activeColor = "#f00"
 
   const handleSendMessage = updatedGrid => {
     dispatch({ type: "update", payload: updatedGrid })
@@ -33,18 +31,17 @@ const Game = ({ connection }) => {
           display: "flex"
         }}>
           <div style={{
-            backgroundColor: `${activeColor}`,
+            backgroundColor: `${state.activeColor}`,
             height: 20,
             width: 20
           }}></div>
-
         </div>
       </div>
 
       <Grid
         handleSendMessage={handleSendMessage}
         state={state}
-        activeColor={activeColor}
+        activeColor={state.activeColor}
         numberOfCells={state.height}
         height={450}
         width={450}

@@ -5,22 +5,34 @@ const Game = require("./Game")
 
 // generate random id + color
 const { height, width, timePerLife } = require("./config")
+
+const stringify = object => JSON.stringify(object)
+
 const game = new Game({ height, width });
 
-const stringify = object => JSON.stringify(object);
 
-wss.on("connection", (ws) => {
+
+
+wss.on("connection", (ws, req, client) => {
   // on connection, re-create the app state (i.e game state)
+
   ws.send(
     stringify({
       type: "connect",
       grid: game.currentState,
+      activeColor: "", // set active color,
+      client: client || null,
+      ip: req.connection.remoteAddress,
       timestamp: new Date().getTime()
     })
   )
 
+
+
   ws.on("message", message => {
     const data = JSON.parse(message)
+
+    ws.send(stringify(ws))
 
     switch (data.type) {
       case "update":

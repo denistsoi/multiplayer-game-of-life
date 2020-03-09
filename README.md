@@ -33,10 +33,17 @@ The `server/Game.js` is based from `https://github.com/denistsoi/game-of-life` w
 ### todos
 - [x] fix syncing issue with server/client
 - [x] move configuration to server side
-
+- [x] refactor onMessage to apiHandler
 
 #### outstanding todos
 - [ ] add color/ random color to server game state (to generate average color)  
+
+
+    identifier: req.headers[sec-websocket-key]
+    if disconnected -> send local storage color to server:
+    assign color instead of generating random color
+
+    
 - [ ] add patterns  
 
 - [ ] life cycle indicator
