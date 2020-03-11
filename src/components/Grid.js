@@ -19,18 +19,19 @@ const Grid = ({ state, height, width, numberOfCells, activeColor, handleSendMess
     }}>
       {
         grid.map((rows, x) =>
-          rows.map((col, y) => (
+          rows.map((colorValue, y) => (
             <div
               key={`${x}-${y}`}
               style={{
                 width: Math.floor(width / numberOfCells) - 2,
                 height: Math.floor(height / numberOfCells) - 2,
-                backgroundColor: grid[x][y] ? activeColor : "white",
+                backgroundColor: grid[x][y] ? colorValue : "white",
                 border: "solid 1px black"
               }}
               onClick={() => {
+                if (activeColor !== [...grid][x][y] && [...grid][x][y] !== 0) return
                 const copy = [...grid]
-                copy[x][y] = copy[x][y] ? 0 : 1
+                copy[x][y] = copy[x][y] ? 0 : activeColor
                 handleSendMessage(copy)
               }}
             />

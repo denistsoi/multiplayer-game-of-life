@@ -1,3 +1,5 @@
+const averageColor = require("./color/averageColor")
+
 class Game {
   constructor({ width, height }) {
     this.height = height
@@ -36,11 +38,12 @@ class Game {
       // columns
       for (let j = 0; j < life[i].length; j++) {
         let state = life[i][j];
-        let neighbours = this.countNeighbours(life, i, j);
+        let [neighbours, values] = this.countNeighbours(life, i, j);
 
-        if (state == 0 && neighbours == 3) {
-          next[i][j] = 1;
-        } else if (state == 1 && (neighbours < 2 || neighbours > 3)) {
+        if (!this._hasValue(state) && neighbours == 3) {
+          // move this to setColor
+          next[i][j] = this.setColor(values);
+        } else if (this._hasValue(state) && (neighbours < 2 || neighbours > 3)) {
           next[i][j] = 0;
         } else {
           next[i][j] = state;
@@ -51,22 +54,37 @@ class Game {
     this._board = [...next];
   }
 
+  // gets an average color of the neighbours
+  setColor(values) {
+    return averageColor(values)
+  }
+
+  // checks if the value is 0 or a color
+  _hasValue(value) {
+    return value !== 0 ? 1 : 0;
+  }
+
   countNeighbours(board, x, y) {
     let counter = 0
     let cols = this.width
     let rows = this.height
+
+    const values = []
 
     for (let i = -1; i < 2; i++) {
       for (let j = -1; j < 2; j++) {
         let col = (x + i + cols) % cols;
         let row = (y + j + rows) % rows;
 
-        counter += board[col][row];
+        if (this._hasValue(board[col][row])) {
+          values.push(board[col][row])
+        }
+        counter = counter + (this._hasValue(board[col][row]));
       }
     }
 
-    counter -= board[x][y]
-    return counter
+    counter = counter - (this._hasValue(board[x][y]))
+    return [counter, values]
   }
 }
 
