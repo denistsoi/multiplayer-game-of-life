@@ -5,14 +5,13 @@ import "./style.css"
 import { gridReducer } from "./reducer"
 import api from "../../api/apiHandler"
 
-
 const Game = ({ connection }) => {
   // setup state
   const initialState = { height: 0, width: 0, grid: [], activeColor: null }
   const [state, dispatch] = useReducer(gridReducer, initialState)
 
   // handle on message
-  connection.onmessage = (event) => api.onMessageHandler(event, dispatch)
+  connection.onmessage = (event) => api.onMessageHandler(event, state, dispatch)
 
   const handleSendMessage = updatedGrid => {
     dispatch({ type: "update", payload: updatedGrid })

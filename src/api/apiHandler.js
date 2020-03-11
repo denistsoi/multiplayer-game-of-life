@@ -1,8 +1,6 @@
-const onMessageHandler = (event, dispatch) => {
+const onMessageHandler = (event, store, dispatch) => {
   // Receiving data from wss
   const data = JSON.parse(event.data);
-
-  console.log(data)
 
   switch (data.type) {
     case "connect":
@@ -15,12 +13,25 @@ const onMessageHandler = (event, dispatch) => {
         }
       })
 
-      // todo: check localstorage
+      // update state of grid
+      dispatch({ type: "update", payload: data.grid })
+
+      // setColor
+      const saveColorToLocalStorage = (color) => {
+        window.localStorage.setItem("activeColor", color)
+        return color
+      }
+
+      const hasColorSaved = window.localStorage.getItem("activeColor") !== null ? true : false
+      const previousColor = window.localStorage.getItem("activeColor")
+
       dispatch({
         type: "setColor",
-        payload: { activeColor: data.activeColor }
+        payload: {
+          activeColor: hasColorSaved ? previousColor : saveColorToLocalStorage(data.activeColor)
+        }
       })
-      dispatch({ type: "update", payload: data.grid })
+
       break;
     case "update":
       dispatch({ type: "update", payload: data.grid })

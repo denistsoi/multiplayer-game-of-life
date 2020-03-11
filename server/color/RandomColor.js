@@ -20,10 +20,6 @@ class RandomColor {
       return string + str;
     }, "#")
   }
-
-  toDecimal() {
-    return `rgb(${this.values.join(",")})`
-  }
 }
 
-export default RandomColor
+module.exports = RandomColor
