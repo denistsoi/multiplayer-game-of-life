@@ -6,7 +6,7 @@ Conway's game of life
 
 ### Screencast
 
-![demo.gif](./demo.gif)
+![demo.gif](./demo-0.3.0.gif)
 
 ### Context
 
