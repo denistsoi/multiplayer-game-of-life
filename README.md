@@ -6,8 +6,7 @@ Conway's game of life
 
 ### Screencast
 
-<!-- ![demo.gif](./demo-0.3.0.gif) -->
-<img src="https://raw.githubusercontent.com/denistsoi/multiplayer-game-of-life/master/demo-0.3.0.gif" height="320" width="480">
+![demo.gif](./demo-0.3.1.gif)
 
 ### Context
 
